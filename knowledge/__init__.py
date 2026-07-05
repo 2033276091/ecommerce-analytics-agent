@@ -4,8 +4,9 @@
 """
 
 from knowledge.schema import Table, Field, ALL_TABLES, get_table
-from knowledge.metrics import Metric, ALL_METRICS, get_metric
+from knowledge.metrics import Metric, ALL_METRICS, get_metric, suggest_metric
 from knowledge.recall import SchemaContext, build_recall_prompt, resolve_time_filter, resolve_time_filter_for_table
+from knowledge.guard import check_recall_completeness, format_guard_for_prompt
 
 __all__ = [
     "Table",
@@ -15,8 +16,11 @@ __all__ = [
     "Metric",
     "ALL_METRICS",
     "get_metric",
+    "suggest_metric",
     "SchemaContext",
     "build_recall_prompt",
     "resolve_time_filter",
     "resolve_time_filter_for_table",
+    "check_recall_completeness",
+    "format_guard_for_prompt",
 ]

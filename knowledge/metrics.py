@@ -193,6 +193,39 @@ def search_metrics(keyword: str) -> list[Metric]:
     return results
 
 
+def suggest_metric(keyword: str, top_n: int = 3) -> list[Metric]:
+    """为未匹配的术语推荐最接近的已定义指标。
+
+    先按名称/别名子串匹配，不够 top_n 时补充编辑距离最近的。
+    用于护栏消息中展示"你可能想要的是..."。
+    """
+    kw = keyword.lower()
+    scored: list[tuple[int, Metric]] = []
+
+    for m in ALL_METRICS:
+        score = 0
+        # 子串匹配加分
+        if kw in m.name.lower():
+            score += 10
+        if kw in m.label.lower():
+            score += 8
+        for alias in m.aliases:
+            if kw in alias.lower():
+                score += 6
+            elif alias.lower() in kw:
+                score += 4
+        # 编辑距离短的加分（简单实现：共同字符数）
+        for candidate in [m.name, m.label] + m.aliases:
+            common = sum(1 for c in kw if c in candidate.lower())
+            score += common * 0.5
+
+        if score > 0:
+            scored.append((score, m))
+
+    scored.sort(key=lambda x: x[0], reverse=True)
+    return [m for _, m in scored[:top_n]]
+
+
 def format_for_prompt() -> str:
     """将全量指标口径格式化为 LLM prompt 可用的文本。"""
     lines = ["# 指标口径定义", ""]
