@@ -24,6 +24,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 5. 提交数据库执行
 6. 根据用户意图返回对应结果
 7. 给出下一步分析建议
+8. 把输出整理成一个文件放在output目录下的一个markdown文件中，命名格式模板为"001—用户意图-问题概要.md"
 
 ## 参考
 
